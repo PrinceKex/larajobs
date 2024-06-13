@@ -79,7 +79,7 @@ class ListingController extends Controller
         $formFields['logo'] = $request->file('logo')->store('logos', 'public');
       }
 
-      $listing->create($formFields);
+      $listing->update($formFields);
 
       // Session::flash('message', 'Listing Created');
 
