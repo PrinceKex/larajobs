@@ -14,7 +14,7 @@ class ListingController extends Controller
       // dd(request('tag'));
       return view('listings.index', [      
       // 'listings' => Listing::all();
-      'listings' => Listing::latest()->filter(request(['tag', 'search']))->get()
+      'listings' => Listing::latest()->filter(request(['tag', 'search']))->paginate(10)
       ]);
     }   
 
@@ -32,6 +32,7 @@ class ListingController extends Controller
 
     // store Listing Data
     public function store(Request $request){
+      //($request->file('logo'))
       // dd($request->all);
       $formFields = $request->validate([
         'title' => 'required',
@@ -43,10 +44,54 @@ class ListingController extends Controller
         'description' => 'required',
       ]);
 
+      if($request->hasFile('logo')){
+        $formFields['logo'] = $request->file('logo')->store('logos', 'public');
+      }
+
       Listing::create($formFields);
 
       // Session::flash('message', 'Listing Created');
 
       return redirect('/')->with('message', 'Listing created successfully');
-    }    
+    }
+  
+  // Show Edit Form
+  public function edit(Listing $listing){
+    dd($listing);
+    return view('listings.edit', ['listing' => $listing]);
+  }
+
+  // Update Listing Data
+   public function update(Request $request, Listing $listing){
+      //($request->file('logo'))
+      // dd($request->all);
+      $formFields = $request->validate([
+        'title' => 'required',
+        'company' => ['required',],
+        'location' => 'required',
+        'website' => 'required',
+        'email' => ['required', 'email'],
+        'tags' => 'required',
+        'description' => 'required',
+      ]);
+
+      if($request->hasFile('logo')){
+        $formFields['logo'] = $request->file('logo')->store('logos', 'public');
+      }
+
+      $listing->create($formFields);
+
+      // Session::flash('message', 'Listing Created');
+
+      return back()->with('message', 'Listing updated successfully!');
+    }
+
+    // Delete Listing
+    public function destroy(Listing $listing){
+      $listing->delete();
+      return redirect('/')->with('message', 'Listing deleted successfully');
+    }
 }
+
+
+
