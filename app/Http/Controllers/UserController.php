@@ -31,7 +31,7 @@ class UserController extends Controller
       auth()->Login($user);
 
       return redirect('/')->with('message', 'User created and logged in');
-      
+
     }
 
     // logout user
@@ -51,9 +51,9 @@ class UserController extends Controller
 
     // Authenticate users
     public function authenticate(Request $request){
-       $formFields = $request->validate([        
-        'email' => ['required', 'email'], 
-        'password' => ['required']
+       $formFields = $request->validate([
+        'email' => ['required', 'email'],
+        'password' => 'required'
       ]);
 
       if(auth()->attempt($formFields)){

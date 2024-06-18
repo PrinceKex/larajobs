@@ -12,11 +12,11 @@ class ListingController extends Controller
     // show all listings
     public function index(Request $request){
       // dd(request('tag'));
-      return view('listings.index', [      
+      return view('listings.index', [
       // 'listings' => Listing::all();
       'listings' => Listing::latest()->filter(request(['tag', 'search']))->paginate(10)
       ]);
-    }   
+    }
 
      // show single listing
     public function show(Listing $listing){
@@ -48,13 +48,15 @@ class ListingController extends Controller
         $formFields['logo'] = $request->file('logo')->store('logos', 'public');
       }
 
+      $formFields['user_id'] = auth()->id();
+
       Listing::create($formFields);
 
       // Session::flash('message', 'Listing Created');
 
       return redirect('/')->with('message', 'Listing created successfully');
     }
-  
+
   // Show Edit Form
   public function edit(Listing $listing){
     dd($listing);
@@ -65,6 +67,12 @@ class ListingController extends Controller
    public function update(Request $request, Listing $listing){
       //($request->file('logo'))
       // dd($request->all);
+
+      // Validate the logged in user owns listing
+      if($listing->user_id != auth()->id()){
+        abort(403, "Unauthorized Action");
+      }
+
       $formFields = $request->validate([
         'title' => 'required',
         'company' => ['required',],
@@ -88,9 +96,19 @@ class ListingController extends Controller
 
     // Delete Listing
     public function destroy(Listing $listing){
+      // Validate the logged in user owns listing
+      if($listing->user_id != auth()->id()){
+        abort(403, "Unauthorized Action");
+      }
+
       $listing->delete();
       return redirect('/')->with('message', 'Listing deleted successfully');
     }
+
+    // Manage Listing
+    public function manage(){
+    return view('listing.manage', ['listings' => auth()->user()->listings()->get()]);
+  }
 }
 
 

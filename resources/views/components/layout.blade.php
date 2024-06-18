@@ -23,7 +23,7 @@
         },
       };
     </script>
-    <title>LaraGigs | Find Laravel Jobs & Projects</title>
+    <title>LaraJobs | Find Laravel Jobs & Projects</title>
   </head>
   <body class="mb-48">
     <nav class="flex justify-between items-center mb-4">
@@ -36,7 +36,7 @@
         <li>
           <a href="/listings/manage" class="hover:text-laravel"><i class="fa-solid fa-gear"></i>Manage Listings</a></li>
         <li>
-          <form class="inline" method="post" action="/logout">
+          <form class="inline" method="POST" action="/logout">
               @csrf
               <button type="submit">
                 <i class="fa-solid fa-door-closed"></i>logout

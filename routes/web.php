@@ -52,6 +52,9 @@ Route::put('/listings/{listing}', [ListingController::class, 'update'])->middlew
 //  Delete Listing
 Route::delete('/listings/{listing}', [ListingController::class, 'destroy'])->middleware('auth');
 
+// Manage Listings
+Route::get('/listings/manage', [ListingController::class, 'manage'])->middleware('auth');
+
 // Single Listing
 Route::get('/listings/{listing}', [ListingController::class, 'show']);
 
@@ -67,10 +70,12 @@ Route::post('/logout', [UserController::class, 'logout'])->middleware('auth');
 // Show Login Form
 Route::get('/login', [UserController::class, 'login'])->name('login')->middleware('guest');
 
-// Log inUser
+// Log in User
 Route::post('/users/authenticate', [UserController::class, 'authenticate']);
 
-/* Route::get('/listings/{listing}', function(Listing $listing){  
+
+
+/* Route::get('/listings/{listing}', function(Listing $listing){
 //     return view('listing', [
 //         'listing' => $listing
 //     ]);
@@ -85,7 +90,7 @@ Route::post('/users/authenticate', [UserController::class, 'authenticate']);
 //   } else {
 //     abort('404');
 //   }
-// });*/ 
+// });*/
 
 // route examples
 // Route::get('/hello', function(){
